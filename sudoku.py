@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 """
 @File    :   sudoku.py
@@ -11,10 +11,10 @@
 """
 
 class point:
-"""
+    """
 初始化方法
 建立坐标系
-"""
+    """
     def __init__(self,x,y):
         self.x = x
         self.y = y
@@ -23,20 +23,20 @@ class point:
 
 
 def rowNum(p,sudoku):
-"""
+    """
 判断行
 :return:
-"""
+    """
     row = set(sudoku[p.y * 4:(p.y + 1) * 4])
     row.remove(0)
     return row
 
 
 def colNum(p,sudoku):
-"""
+    """
 判断列
 :return:
-"""
+    """
     col = []
     length = len(sudoku)
     for i in range(p.x,length,4):
@@ -47,16 +47,16 @@ def colNum(p,sudoku):
 
 
 def initPoint(sudoku):
-"""
+    """
 找到需要填充的位置
 :return:
-"""
+    """
     pointList = []
     length = len(sudoku)
     for i in range(length):
         if sudoku[i] == 0:
-            p = point(i % 4,i // 4)   #遍历所有的点
-            for j in range(1,5):      #找到不重复的结果
+            p = point(i % 4,i // 4)    #遍历所有的点
+            for j in range(1,5):       #找到不重复的结果
                 if j not in rowNum(p,sudoku) and j not in colNum(p,sudoku):
                     p.available.append(j)
             pointList.append(p)
@@ -64,16 +64,17 @@ def initPoint(sudoku):
 
 
 def tryInsert(p,sudoku):
-"""
+    """
 对于每个需要的位置进行填充
 :return:
-"""
+    """
     availNum = p.available
     for v in availNum:
         p.value = v
         if check(p,sudoku):
             sudoku[p.y*4 + p.x] = p.value
             if len(pointList) <= 0:
+                showSudoku(sudoku)
                 exit()
             p2 = pointList.pop()
             tryInsert(p2,sudoku)
@@ -86,10 +87,10 @@ def tryInsert(p,sudoku):
 
 
 def check(p,sudoku):
-"""
+    """
 判断填充条件
 :return:
-""" 
+    """ 
     #如果为0就不填充
     if p.value == 0:
         return False
@@ -98,7 +99,17 @@ def check(p,sudoku):
         return True
     else:
         return False
-        
+
+
+def showSudoku(sudoku):
+    """
+    定义输出格式
+    """
+    for j in range(4):
+        for i in range(4):
+            print('%d '%(sudoku[j * 4 + i]),end='')
+        print('')
+
 
 if __name__ == '__main__':
     sudoku = [
